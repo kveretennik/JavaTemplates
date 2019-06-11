@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Добавить товар</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+    <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}"/>
+</head>
+
+<html>
+<body>
+    <div th:replace="~{navigation :: navi(AddItem)}"/>
+    <div class="container">
+        <div th:if="${itemCreationError != null}">
+            <div class="alert alert-danger" role="alert">
+                <span th:text="${itemCreationError}"/>
+            </div>
+        </div>
+
+        <form th:action="@{'/item/add-edit'}" th:object="${item}" method="post">
+        <!--<form th:action="@{'/addItem/' + ${item.itemID}}" th:object="${item}" method="post">-->
+        <!--<form th:action="@{'/' + ${product.getProductName() == null ? 'add' : 'edit/' + ${product.productID}}}" th:object="${product}" method="post">-->
+            <input hidden type="text" th:field="*{itemID}" class="form-control" id="itemID">
+            <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('itemNumber')}" th:errors="*{itemNumber}"/>
+            <div class="form-group">
+                <label for="itemNumber">Позиция</label>
+                <input type="text" th:field="*{itemNumber}" class="form-control" id="itemNumber" placeholder="Введите номер позиции">
+            </div>
+            <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('itemName')}" th:errors="*{itemName}"/>
+            <div class="form-group">
+                <label for="itemName">Наименование</label>
+                <input type="text" th:field="*{itemName}" class="form-control" id="itemName" placeholder="Введите наименование позиции">
+            </div>
+            <div class="form-group">
+                <label for="itemDescription">Описание</label>
+                <input type="text" th:field="*{itemDescription}" class="form-control" id="itemDescription" placeholder="Введите описание позиции">
+            </div>
+            <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('primaryUOMCode')}" th:errors="*{primaryUOMCode}"/>
+            <div class="form-group">
+                <label for="primaryUOMCode">Наименование</label>
+                <input type="text" th:field="*{primaryUOMCode}" class="form-control" id="primaryUOMCode" placeholder="Введите Е.И. позиции">
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </form>
+    </div>
+</body>
+</html>

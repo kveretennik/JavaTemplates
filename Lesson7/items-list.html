@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="ctx" th:content="${#httpServletRequest.getContextPath()}">
+    <title>Магазин</title>
+
+    <link rel="stylesheet" href="../static/css/items-list.css" th:href="@{/css/items-list.css}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/external.js}"></script>
+</head>
+<body>
+    <div th:replace="~{navigation :: navi(Items)}"/>
+    <div class="container">
+        <br>
+        <div class="inline-container">
+            <div class="inline-div">
+                <h1>Каталог позиций</h1>
+            </div>
+            <!--<div class="inline-div">-->
+                <!--<a th:href="@{/item/add-edit/0}" class="btn btn-primary btn-md active" role="button" aria-pressed="true">Добавить</a>-->
+            <!--</div>-->
+        </div>
+
+
+
+        <!--<form class="form-inline" th:action="@{/find}" th:object="${minMaxSearch}" method="get">-->
+        <!--<label class="sr-only" for="inlineFormMinCost">Минимальная цена</label>-->
+        <!--<input type="number" class="form-control mb-2 mr-sm-2" id="inlineFormMinCost" placeholder="Min Cost" th:field="*{minCost}">-->
+
+
+        <!--<label class="sr-only" for="inlineFormMaxCost">Максимальная цена</label>-->
+        <!--<div class="input-group mb-2 mr-sm-2">-->
+        <!--<input type="number" class="form-control" id="inlineFormMaxCost" placeholder="Max Cost" th:field="*{maxCost}">-->
+        <!--</div>-->
+
+        <!--<button type="submit" class="btn btn-primary mb-2">Найти</button>-->
+        <!--</form>-->
+
+        <span th:if="${items.getTotalPages() == 0}">Товаров нет</span>
+        <div th:unless="${items.getTotalPages() == 0}">
+
+            <form th:action="@{'/item/bulk-delete'}" method="post">
+                <div class="inline-container">
+                    <button type="submit" class="btn btn-primary btn-sm active">Удалить</button>
+                    <div class="inline-div">
+                        <a th:href="@{/item/add-edit/0}" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Добавить</a>
+                    </div>
+                </div>
+                <p>
+
+                <table class="table table-hover">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th class="th-my"><input th:type="checkbox" th:id="selectAllItems" th:name="selectAllItems" th:onclick="'javascript:checkAllItems()'"/></th>
+                        <th class="th-my">Позиция</th>
+                        <th class="th-my">Наименование</th>
+                        <th class="th-my">Описание</th>
+                        <th class="th-my">Е.И.</th>
+                        <th class="th-my">Редактировать</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item : ${items}">
+
+                        <td class="td-content-center"><input th:type="checkbox" th:name="selectItemID" th:value="${item.itemID}"/></td>
+                        <td class="td-content-center" th:text="${item.itemNumber}"/>
+                        <td th:text="${item.itemName}"/>
+                        <td th:text="${item.itemDescription}"/>
+                        <td class="td-content-center" th:text="${item.primaryUOMCode}"/>
+                        <td class="td-content-center">
+                            <a class="href-button" th:href="@{'/item/add-edit/' + ${item.itemID}}">
+                                <img th:src="@{/images/edit.png}" th:alt="Редактировать">
+                            </a>
+                        </td>
+
+                        <!--<td>-->
+                        <!--&lt;!&ndash;<a th:href="@{'/edit/' + ${product.productID}}" th:text="Редактировать"/>&ndash;&gt;-->
+                        <!--<a th:href="@{'/edit/' + ${item.itemID}}" th:text="Редактировать"/>-->
+                        <!--</td>-->
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <span th:if="${items.getNumber() > 0}">
+                        <li class="page-item">
+                            <a class="page-link" th:href="@{'?page='+${items.getNumber()-1}}">Previous</a>
+                        </li>
+                    </span>
+                    <li class="page-item" th:each="i : ${#numbers.sequence(1, items.getTotalPages())}" th:classappend="${items.getNumber()+1 == i ? 'page-item active' : ''}">
+                        <a class="page-link" th:text="${i}" th:href="@{'?page='+${i - 1}}"/>
+                    </li>
+
+                    <span th:if="${items.getNumber() < items.getTotalPages()-1}">
+                        <li class="page-item">
+                            <a class="page-link" th:href="@{'?page='+${items.getNumber()+1}}">Next</a>
+                        </li>
+                    </span>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!--<script>-->
+        <!--function checkAllItems() {-->
+            <!--var checkbox = document.getElementById('selectAllItems');-->
+            <!--var checkboxes = document.getElementsByName('selectItemID');-->
+
+            <!--for (var i in checkboxes) {-->
+                <!--checkboxes[i].checked = checkbox.checked;-->
+            <!--}-->
+        <!--}-->
+    <!--</script>-->
+</body>
+</html>

@@ -1,0 +1,21 @@
+.inline-container {
+    position: relative;
+    text-align-last: justify;
+}
+
+.inline-div {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.th-my {
+    text-align: center;
+}
+
+.td-content-center {
+    text-align: center;
+}
+
+.td-content-center img {
+    width: 10%;
+}
